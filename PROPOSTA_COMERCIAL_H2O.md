@@ -223,7 +223,39 @@ Considerando apenas a base atual de **130 clientes de água** e a otimização d
 
 ---
 
-## 10. ASSINATURA E CONTATO PROFISSIONAL
+## 10. PROPOSTA FINANCEIRA DE IMPLEMENTAÇÃO E SUSTENTAÇÃO
+
+Apresentamos a estrutura de valores oficiais para o desenvolvimento, implantação e sustentação do projeto, desenhada para ter retorno sobre o investimento (ROI) já no primeiro mês de operação:
+
+### 10.1. Implementação e Configuração Completa (Setup Inicial)
+* **Valor do Investimento:** **R$ 1.800,00** (Taxa Única)
+* **Condições Facilitadas de Pagamento:**
+  * **Opção 1 (À Vista com Desconto):** R$ 1.710,00 (5% de desconto via PIX);
+  * **Opção 2 (Parcelado):** Entrada de R$ 600,00 + 2 parcelas mensais de R$ 600,00 (ou em até 10x no cartão).
+* **O que está 100% incluso:**
+  * Cadastro unificado dos 130+ clientes recorrentes e preferências de águas;
+  * Configuração e personalização do sistema de balcão (computador, tablet e celular);
+  * Criação, testes e ativação do robô de autoatendimento WhatsApp 24/7;
+  * Parametrização dos disparos preditivos do "Radar de Galão Vazio" (sextas e sábados);
+  * Configuração do painel de logística do caminhão diário e balanço de cascos vazios vs. cheios;
+  * Geração e instalação dos QR Codes e adesivos do menu digital "Garçom Express" nas 3 máquinas do fundo da loja e mesa de sinuca;
+  * Treinamento presencial/remoto prático com o Sr. Luiz Fernando até total domínio da ferramenta.
+
+### 10.2. Manutenção, Nuvem e Suporte Mensal (Sustentação Operacional)
+* **Valor Mensal:** **R$ 250,00 / mês**
+* **O que está 100% incluso:**
+  * Hospedagem de alta performance em nuvem Serverless (tempo de resposta sub-100ms);
+  * Backups diários e redundantes de todas as comandas, histórico de clientes e estoque;
+  * Suporte técnico direto via WhatsApp para tirar dúvidas e ajustes imediatos;
+  * Atualizações contínuas de segurança e melhorias de performance;
+  * Monitoramento contínuo da estabilidade do robô de WhatsApp.
+
+> [!NOTE]
+> **Retorno do Investimento (ROI Imediato):** Com a antecipação de apenas **15 a 20 galões nos domingos fechados**, o faturamento recuperado já cobre com sobra a mensalidade de R$ 250,00, tornando o sistema um centro de lucro puro desde o primeiro mês.
+
+---
+
+## 11. ASSINATURA E CONTATO PROFISSIONAL
 
 Esta proposta consolida o compromisso de entregar ao Sr. **Luiz Fernando** uma ferramenta prática, robusta e capaz de modernizar completamente a rotina do seu estabelecimento comercial.
 
