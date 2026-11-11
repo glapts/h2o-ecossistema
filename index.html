@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>H2O - Ecossistema de Automação & Vendas | Depósito de Água, Bar, Sinuca & Lounge</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Tailwind Custom Config -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            win: {
+              blue: '#0078D4',
+              blueDark: '#005A9E',
+              blueDeep: '#003A66',
+              blueLight: '#E5F3FF',
+            },
+            grass: {
+              green: '#2ECC71',
+              greenDark: '#219653',
+              greenLight: '#EAFAF1',
+            },
+            surface: {
+              bg: '#F4F7FA',
+              card: '#FFFFFF',
+              dark: '#1E293B',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-nav {
+      background: rgba(0, 58, 102, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .hero-gradient {
+      background: linear-gradient(135deg, #003A66 0%, #005A9E 50%, #0078D4 85%, #219653 100%);
+    }
+    .card-shadow {
+      box-shadow: 0 10px 30px -5px rgba(0, 90, 158, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
+    }
+    .custom-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #2ECC71;
+      border: 3px solid #FFFFFF;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(46, 204, 113, 0.6);
+    }
+    .glow-green {
+      box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
+    }
+    .glow-blue {
+      box-shadow: 0 0 20px rgba(0, 120, 212, 0.4);
+    }
+    /* Animação suave de pulso */
+    @keyframes pulse-soft {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .animate-pulse-soft {
+      animation: pulse-soft 3s infinite ease-in-out;
+    }
+    /* Scrollbar estilizada */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94A3B8;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0078D4;
+    }
+  </style>
+</head>
+<body class="bg-surface-bg text-slate-900 antialiased font-sans selection:bg-win-blue selection:text-white">
+
+  <!-- AVISO TOAST FLUTUANTE (NOTIFICAÇÃO EM TEMPO REAL) -->
+  <div id="toast-notification" class="fixed top-24 right-5 z-50 transform translate-x-96 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border-2 border-grass-green flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-grass-green/20 text-grass-green flex items-center justify-center shrink-0">
+        <i data-lucide="bell-ring" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-grass-green uppercase tracking-wider" id="toast-tag">ALERTA BALCÃO</p>
+        <p class="text-sm font-semibold text-white" id="toast-msg">Novo pedido recebido!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
+  <header class="fixed top-0 left-0 right-0 z-40 glass-nav border-b border-win-blue/40 text-white transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- LOGO H2O ECOSSISTEMA -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-12 h-12 rounded-2xl bg-white p-2 shadow-lg flex items-center justify-center border-2 border-grass-green group-hover:scale-105 transition-transform">
+          <div class="w-full h-full bg-gradient-to-br from-win-blue to-win-blueDark rounded-lg flex items-center justify-center text-white font-display font-black text-xl">
+            H<sub class="text-xs text-grass-green">2</sub>O
+          </div>
+        </div>
+        <div>
+          <span class="font-display font-black text-xl tracking-tight flex items-center gap-1.5">
+            ECOSSISTEMA <span class="text-grass-green font-extrabold">H2O</span>
+          </span>
+          <span class="text-[10px] sm:text-xs block text-slate-300 font-semibold tracking-wider uppercase">
+            Água • Bar • Sinuca • Lounge
+          </span>
+        </div>
+      </a>
+
+      <!-- MENU DESKTOP -->
+      <nav class="hidden lg:flex items-center gap-6 text-xs sm:text-sm font-medium text-slate-100">
+        <a href="#balcao-comanda" class="hover:text-grass-green transition-colors flex items-center gap-1.5">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-grass-green"></i> Balcão & Comanda
+        </a>
+        <a href="#trilhas-agua" class="hover:text-grass-green transition-colors flex items-center gap-1.5">
+          <i data-lucide="droplet" class="w-4 h-4 text-sky-300"></i> 4 Trilhas de Água
+        </a>
+        <a href="#whatsapp-domingo" class="hover:text-grass-green transition-colors flex items-center gap-1.5">
+          <i data-lucide="message-square" class="w-4 h-4 text-emerald-400"></i> Robô & Domingo
+        </a>
+        <a href="#caminhao-cascos" class="hover:text-grass-green transition-colors flex items-center gap-1.5">
+          <i data-lucide="truck" class="w-4 h-4 text-amber-300"></i> Caminhão & Cascos
+        </a>
+        <a href="#sinuca-lounge" class="hover:text-grass-green transition-colors flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-4 h-4 text-yellow-300"></i> Sinuca & 3 Máquinas
+        </a>
+        <a href="#simulador" class="hover:text-grass-green transition-colors flex items-center gap-1.5">
+          <i data-lucide="calculator" class="w-4 h-4 text-grass-green"></i> Lucros
+        </a>
+      </nav>
+
+      <!-- BOTÃO PROPOSTA COMERCIAL (DESTAQUE) -->
+      <div class="flex items-center gap-3">
+        <button onclick="abrirModalProposta()" class="inline-flex items-center gap-2 bg-gradient-to-r from-grass-green to-grass-greenDark hover:brightness-110 text-white text-xs sm:text-sm font-extrabold py-2.5 px-4 sm:px-5 rounded-xl shadow-lg shadow-grass-green/30 transition-all active:scale-95">
+          <i data-lucide="file-text" class="w-4 h-4"></i>
+          <span>Proposta Comercial</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION PRINCIPAL -->
+  <section class="relative pt-28 pb-20 md:pt-36 md:pb-24 hero-gradient text-white overflow-hidden">
+    <!-- Efeitos de iluminação decorativa -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-win-blue/40 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-grass-green/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <!-- BADGE DESTINATÁRIO -->
+      <div class="flex flex-wrap items-center gap-3 mb-6">
+        <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/30 text-white text-xs font-black uppercase tracking-wider py-1.5 px-3.5 rounded-full">
+          <i data-lucide="shield-check" class="w-4 h-4 text-grass-green"></i>
+          Apresentado Exclusivamente Para: Sr. Luiz Fernando
+        </span>
+        <span class="inline-flex items-center gap-1.5 bg-grass-green/20 border border-grass-green/40 text-grass-green text-xs font-bold py-1.5 px-3 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-grass-green animate-ping"></span>
+          Base Ativa: 130+ Clientes Recorrentes de Água 10L
+        </span>
+      </div>
+
+      <!-- TÍTULO PRINCIPAL & SUBTÍTULO -->
+      <div class="max-w-4xl space-y-4">
+        <h1 class="font-display font-black text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight uppercase">
+          Plano Diretor de Automação, Comanda Digital & <span class="text-grass-green drop-shadow-md">Alavancagem de Vendas</span>
+        </h1>
+        <p class="text-base sm:text-xl text-slate-100 font-normal leading-relaxed max-w-3xl">
+          Estratégia integrada sob medida para o <strong>Depósito de Água, Bar de Balcão, Mesa de Sinuca e Lounge das 3 Máquinas</strong>. Fim do celular na mão, antecipação de faturamento dos domingos e zero erro de comanda.
+        </p>
+      </div>
+
+      <!-- ESTATÍSTICAS RÁPIDAS DA PROPOSTA -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 sm:p-5 rounded-2xl">
+          <div class="flex items-center gap-2 text-grass-green mb-1">
+            <i data-lucide="users" class="w-5 h-5"></i>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-200">Base Fiel</span>
+          </div>
+          <div class="font-display font-black text-2xl sm:text-3xl text-white">130+</div>
+          <div class="text-xs text-slate-300 mt-1">Clientes ativos de água 10L</div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 sm:p-5 rounded-2xl">
+          <div class="flex items-center gap-2 text-sky-300 mb-1">
+            <i data-lucide="calendar-check-2" class="w-5 h-5"></i>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-200">Radar Domingo</span>
+          </div>
+          <div class="font-display font-black text-2xl sm:text-3xl text-white">100%</div>
+          <div class="text-xs text-slate-300 mt-1">Vendas antecipadas na Sexta/Sáb</div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 sm:p-5 rounded-2xl">
+          <div class="flex items-center gap-2 text-emerald-400 mb-1">
+            <i data-lucide="smartphone" class="w-5 h-5"></i>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-200">Zero Digitação</span>
+          </div>
+          <div class="font-display font-black text-2xl sm:text-3xl text-white">24/7</div>
+          <div class="text-xs text-slate-300 mt-1">Robô WhatsApp no balcão</div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 sm:p-5 rounded-2xl">
+          <div class="flex items-center gap-2 text-yellow-300 mb-1">
+            <i data-lucide="trending-up" class="w-5 h-5"></i>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-200">Ticket Médio</span>
+          </div>
+          <div class="font-display font-black text-2xl sm:text-3xl text-white">+38%</div>
+          <div class="text-xs text-slate-300 mt-1">Giro com Sinuca & Máquinas</div>
+        </div>
+      </div>
+
+      <!-- BOTÕES DE CHAMADA -->
+      <div class="flex flex-wrap items-center gap-4 mt-8">
+        <a href="#balcao-comanda" class="inline-flex items-center gap-2 bg-grass-green hover:bg-grass-greenDark text-slate-900 hover:text-white font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-xl transition-all active:scale-95">
+          <i data-lucide="mouse-pointer-click" class="w-5 h-5"></i>
+          Testar Comanda Digital do Balcão
+        </a>
+        <a href="#whatsapp-domingo" class="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white font-bold text-sm sm:text-base py-3.5 px-6 rounded-2xl backdrop-blur-md border border-white/30 transition-all">
+          <i data-lucide="bot" class="w-5 h-5"></i>
+          Simular Robô do WhatsApp
+        </a>
+        <button onclick="abrirModalProposta()" class="inline-flex items-center gap-2 bg-win-blueDeep/80 hover:bg-win-blueDeep text-white font-bold text-sm sm:text-base py-3.5 px-6 rounded-2xl border border-win-blueLight/30 transition-all">
+          <i data-lucide="book-open" class="w-5 h-5"></i>
+          Ler Proposta na Íntegra
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DIAGNÓSTICO DOS 3 GARGALOS OPERACIONAIS (ITEM 1 DO PDF) -->
+  <section class="py-16 md:py-20 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-win-blue text-white font-black flex items-center justify-center text-sm shadow-md">1</div>
+        <span class="text-xs sm:text-sm font-extrabold text-win-blue tracking-wider uppercase">Diagnóstico Estratégico</span>
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-slate-900 tracking-tight mb-4">
+        OPORTUNIDADES IMEDIATAS NA LOJA DO LUIZ FERNANDO
+      </h2>
+      <p class="text-sm sm:text-base text-slate-600 max-w-4xl leading-relaxed mb-10">
+        Prezado <strong>Luiz Fernando</strong>, sua loja possui clientes leais e movimentação ativa todos os dias. Porém, identificamos <strong>3 gargalos operacionais críticos</strong> que drenam a sua energia diária e deixam dinheiro escapar:
+      </p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        
+        <!-- CARD GARGALO 1 -->
+        <div class="p-6 rounded-3xl bg-surface-bg border-t-4 border-win-blue card-shadow space-y-4 transition-transform hover:-translate-y-1">
+          <div class="w-12 h-12 rounded-2xl bg-win-blueLight text-win-blue flex items-center justify-center">
+            <i data-lucide="smartphone" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-display font-black text-lg text-slate-900">
+            📱 Celular na Mão o Dia Todo
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Hoje todo pedido de água dos 130 clientes chega pelo WhatsApp de forma manual. Você precisa interromper o atendimento dos clientes presenciais no balcão a todo instante para digitar, ler áudios e confirmar endereços.
+          </p>
+          <div class="pt-3 border-t border-slate-200 flex items-center gap-2 text-xs font-bold text-win-blue">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-grass-green"></i>
+            <span>Solução: Robô 24/7 com Zero Digitação</span>
+          </div>
+        </div>
+
+        <!-- CARD GARGALO 2 -->
+        <div class="p-6 rounded-3xl bg-grass-greenLight/60 border-t-4 border-grass-green card-shadow space-y-4 transition-transform hover:-translate-y-1">
+          <div class="w-12 h-12 rounded-2xl bg-grass-green/20 text-grass-greenDark flex items-center justify-center">
+            <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-display font-black text-lg text-grass-greenDark">
+            📝 Comanda & Perfil no Balcão
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            Clientes da sinuca, do bar e das máquinas consomem produtos fracionados ao longo de horas. Sem um perfil rápido e comanda digital em 1 clique, há risco diário de esquecimento de itens e perda de histórico.
+          </p>
+          <div class="pt-3 border-t border-grass-green/20 flex items-center gap-2 text-xs font-bold text-grass-greenDark">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-grass-green"></i>
+            <span>Solução: Perfil 360º & Comanda Touch Instantânea</span>
+          </div>
+        </div>
+
+        <!-- CARD GARGALO 3 -->
+        <div class="p-6 rounded-3xl bg-win-blueLight/50 border-t-4 border-win-blueDark card-shadow space-y-4 transition-transform hover:-translate-y-1">
+          <div class="w-12 h-12 rounded-2xl bg-win-blue/20 text-win-blueDark flex items-center justify-center">
+            <i data-lucide="truck" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-display font-black text-lg text-win-blueDark">
+            🚚 Domingos & Troca de Cascos
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            A loja fecha aos domingos (gerando fuga de clientes na emergência) e o caminhão da distribuidora passa apenas 1x ao dia para recolher galões vazios e descarregar cheios, exigindo contagem cirúrgica.
+          </p>
+          <div class="pt-3 border-t border-win-blue/20 flex items-center gap-2 text-xs font-bold text-win-blueDark">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-grass-green"></i>
+            <span>Solução: Radar de Galão Vazio + Painel de Cascos</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MÓDULO INTERATIVO 1: BALCÃO & COMANDA DIGITAL EM TEMPO REAL (ITEM 2 DO PDF) -->
+  <section id="balcao-comanda" class="py-16 md:py-24 bg-surface-bg border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-grass-greenDark text-white font-black flex items-center justify-center text-sm shadow-md">2</div>
+        <span class="text-xs sm:text-sm font-extrabold text-grass-greenDark tracking-wider uppercase">Operação de Caixa & Vendas</span>
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-slate-900 tracking-tight mb-2">
+        SISTEMA DE PERFIL DE CLIENTES 360º & COMANDA DIGITAL
+      </h2>
+      <p class="text-sm sm:text-base text-slate-600 max-w-4xl mb-8 leading-relaxed">
+        Chegou qualquer freguês na loja — para comprar água, jogar sinuca, beber uma cerveja ou jogar nas máquinas — você abre o perfil dele em 1 clique. Clique nos botões abaixo para <strong>testar a comanda em tempo real</strong>:
+      </p>
+
+      <!-- SIMULADOR INTERATIVO BALCÃO -->
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- COLUNA ESQUERDA: CLIENTES & CATÁLOGO DE PRODUTOS (7 COLS) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- SELEÇÃO RÁPIDA DE CLIENTES HABITUAIS (130 CLIENTES) -->
+          <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold text-win-blue uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="search" class="w-4 h-4"></i> Localizar Cliente no Balcão
+              </span>
+              <span class="text-[11px] bg-slate-100 font-bold px-2.5 py-1 rounded-full text-slate-600">
+                130 Clientes Cadastrados
+              </span>
+            </div>
+            
+            <!-- ABAS DE CLIENTES DEMO -->
+            <div class="flex flex-wrap gap-2 pt-1" id="clientes-list">
+              <button onclick="selecionarCliente('carlos')" id="btn-cli-carlos" class="cli-tab active px-3.5 py-2 rounded-xl text-xs font-bold border border-win-blue bg-win-blue text-white shadow-sm transition-all">
+                👤 Seu Carlos (Barata) • Ibirá 10L
+              </button>
+              <button onclick="selecionarCliente('marcos')" id="btn-cli-marcos" class="cli-tab px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all">
+                👤 Marcos Pedreiro • Aldeinha 10L
+              </button>
+              <button onclick="selecionarCliente('renato')" id="btn-cli-renato" class="cli-tab px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all">
+                👤 Renato (Mesa Sinuca) • Crystal
+              </button>
+              <button onclick="selecionarCliente('dona-neide')" id="btn-cli-dona-neide" class="cli-tab px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition-all">
+                👤 Dona Neide • Levíssima 10L
+              </button>
+            </div>
+
+            <!-- DETALHES 360 DO CLIENTE SELECIONADO -->
+            <div class="mt-3 p-4 rounded-2xl bg-win-blueLight/60 border border-win-blue/20 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs" id="cliente-card-detalhes">
+              <div>
+                <span class="text-slate-500 block text-[10px] uppercase font-bold">Água Habitual:</span>
+                <span class="font-black text-win-blueDark text-sm" id="cli-agua">Água Ibirá 10L</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block text-[10px] uppercase font-bold">Casco Próprio:</span>
+                <span class="font-black text-grass-greenDark text-sm" id="cli-casco">Sim (2 Cascos)</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block text-[10px] uppercase font-bold">Cashback Sinuca:</span>
+                <span class="font-black text-emerald-700 text-sm" id="cli-cashback">R$ 6,00 acumulados</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block text-[10px] uppercase font-bold">Frequência:</span>
+                <span class="font-bold text-slate-800 text-sm" id="cli-freq">Semanal (6 dias)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CATÁLOGO TOUCH-FIRST DE PRODUTOS -->
+          <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 class="font-display font-black text-base text-slate-900 flex items-center gap-2">
+                <i data-lucide="plus-circle" class="w-5 h-5 text-grass-green"></i>
+                Lançar Produtos na Comanda (Clique para Adicionar)
+              </h3>
+              <span class="text-xs text-slate-500">Toque 1x para somar</span>
+            </div>
+
+            <!-- GRADE DE PRODUTOS POR CATEGORIA -->
+            <div class="space-y-4">
+              
+              <!-- ÁGUAS DE 10L -->
+              <div>
+                <span class="text-xs font-black text-win-blue uppercase tracking-wider block mb-2">
+                  💧 Galões de Água 10 Litros
+                </span>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  <button onclick="adicionarItem('Água Ibirá 10L (Medicinal/Alcalina)', 30.00, 'agua')" class="p-3 text-left rounded-2xl border-2 border-slate-200 hover:border-win-blue bg-slate-50 hover:bg-win-blueLight/40 transition-all group">
+                    <span class="text-[10px] font-black text-win-blue block uppercase">Saúde Premium</span>
+                    <strong class="text-xs font-black text-slate-900 block group-hover:text-win-blue">Água Ibirá 10L</strong>
+                    <span class="text-xs font-black text-grass-greenDark mt-1 block">R$ 30,00</span>
+                  </button>
+
+                  <button onclick="adicionarItem('Água Aldeinha 10L', 17.00, 'agua')" class="p-3 text-left rounded-2xl border-2 border-slate-200 hover:border-win-blue bg-slate-50 hover:bg-win-blueLight/40 transition-all group">
+                    <span class="text-[10px] font-black text-slate-500 block uppercase">Equilíbrio Familiar</span>
+                    <strong class="text-xs font-black text-slate-900 block group-hover:text-win-blue">Água Aldeinha 10L</strong>
+                    <span class="text-xs font-black text-grass-greenDark mt-1 block">R$ 17,00</span>
+                  </button>
+
+                  <button onclick="adicionarItem('Água Levíssima 10L', 16.00, 'agua')" class="p-3 text-left rounded-2xl border-2 border-slate-200 hover:border-win-blue bg-slate-50 hover:bg-win-blueLight/40 transition-all group">
+                    <span class="text-[10px] font-black text-slate-500 block uppercase">Equilíbrio Diário</span>
+                    <strong class="text-xs font-black text-slate-900 block group-hover:text-win-blue">Água Levíssima 10L</strong>
+                    <span class="text-xs font-black text-grass-greenDark mt-1 block">R$ 16,00</span>
+                  </button>
+
+                  <button onclick="adicionarItem('Água Crystal 10L (Refil)', 13.00, 'agua')" class="p-3 text-left rounded-2xl border-2 border-slate-200 hover:border-win-blue bg-slate-50 hover:bg-win-blueLight/40 transition-all group">
+                    <span class="text-[10px] font-black text-amber-600 block uppercase">Giro Rápido</span>
+                    <strong class="text-xs font-black text-slate-900 block group-hover:text-win-blue">Água Crystal Refil</strong>
+                    <span class="text-xs font-black text-grass-greenDark mt-1 block">R$ 13,00</span>
+                  </button>
+
+                  <button onclick="adicionarItem('Crystal 10L Completa (Com Casco)', 36.00, 'agua-casco')" class="col-span-2 p-3 text-left rounded-2xl border-2 border-emerald-300 hover:border-grass-green bg-emerald-50 hover:bg-emerald-100 transition-all group">
+                    <span class="text-[10px] font-black text-grass-greenDark block uppercase">Trava de Fidelidade / 2º Casco Reserva</span>
+                    <strong class="text-xs font-black text-slate-900 block group-hover:text-grass-greenDark">Crystal Completa (Galão + Casco)</strong>
+                    <span class="text-xs font-black text-grass-greenDark mt-1 block">R$ 36,00 (Casco fica com cliente)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- BEBIDAS, SINUCA & LOUNGE -->
+              <div>
+                <span class="text-xs font-black text-grass-greenDark uppercase tracking-wider block mb-2">
+                  🍺 Bar de Balcão, Sinuca & Petiscos
+                </span>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  <button onclick="adicionarItem('Cerveja Heineken Long Neck', 10.00, 'bar')" class="p-3 text-left rounded-2xl border border-slate-200 hover:border-grass-green bg-slate-50 hover:bg-grass-greenLight transition-all">
+                    <strong class="text-xs font-bold text-slate-800 block">Cerveja Heineken LN</strong>
+                    <span class="text-xs font-black text-slate-900 mt-1 block">R$ 10,00</span>
+                  </button>
+
+                  <button onclick="adicionarItem('Cerveja Amstel / Brahma Lata', 6.50, 'bar')" class="p-3 text-left rounded-2xl border border-slate-200 hover:border-grass-green bg-slate-50 hover:bg-grass-greenLight transition-all">
+                    <strong class="text-xs font-bold text-slate-800 block">Cerveja Lata 350ml</strong>
+                    <span class="text-xs font-black text-slate-900 mt-1 block">R$ 6,50</span>
+                  </button>
+
+                  <button onclick="adicionarItem('Energético Red Bull', 12.00, 'bar')" class="p-3 text-left rounded-2xl border border-slate-200 hover:border-grass-green bg-slate-50 hover:bg-grass-greenLight transition-all">
+                    <strong class="text-xs font-bold text-slate-800 block">Energético Red Bull</strong>
+                    <span class="text-xs font-black text-slate-900 mt-1 block">R$ 12,00</span>
+                  </button>
+
+                  <button onclick="adicionarItem('Refrigerante Lata 350ml', 5.00, 'bar')" class="p-3 text-left rounded-2xl border border-slate-200 hover:border-grass-green bg-slate-50 hover:bg-grass-greenLight transition-all">
+                    <strong class="text-xs font-bold text-slate-800 block">Refrigerante Lata</strong>
+                    <span class="text-xs font-black text-slate-900 mt-1 block">R$ 5,00</span>
+                  </button>
+
+                  <button onclick="adicionarItem('Ficha de Mesa de Sinuca', 4.00, 'sinuca')" class="p-3 text-left rounded-2xl border-2 border-amber-300 hover:border-amber-500 bg-amber-50/70 hover:bg-amber-100 transition-all">
+                    <span class="text-[10px] font-black text-amber-800 block uppercase">Mesa Sinuca</span>
+                    <strong class="text-xs font-bold text-slate-800 block">1 Ficha de Sinuca</strong>
+                    <span class="text-xs font-black text-slate-900 mt-1 block">R$ 4,00</span>
+                  </button>
+
+                  <button onclick="adicionarItem('Dose Especial / Cachaça Artesanal', 7.00, 'bar')" class="p-3 text-left rounded-2xl border border-slate-200 hover:border-grass-green bg-slate-50 hover:bg-grass-greenLight transition-all">
+                    <strong class="text-xs font-bold text-slate-800 block">Dose Especial</strong>
+                    <span class="text-xs font-black text-slate-900 mt-1 block">R$ 7,00</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUNA DIREITA: TELA DA COMANDA DIGITAL DO BALCÃO (5 COLS) -->
+        <div class="lg:col-span-5">
+          <div class="bg-white p-6 rounded-3xl card-shadow border-2 border-win-blue sticky top-24 space-y-5">
+            
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+              <div>
+                <span class="text-[11px] font-extrabold text-win-blue uppercase tracking-wider">Comanda Digital Balcão</span>
+                <h3 class="font-display font-black text-lg text-slate-900" id="comanda-cliente-nome">Seu Carlos (Barata)</h3>
+              </div>
+              <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Aberta
+              </span>
+            </div>
+
+            <!-- LISTAGEM DE ITENS DA COMANDA -->
+            <div class="space-y-2.5 max-h-64 overflow-y-auto pr-1" id="comanda-itens">
+              <!-- Itens injetados via JS -->
+            </div>
+
+            <!-- RESUMO DE VALORES E CASHBACK -->
+            <div class="pt-4 border-t border-slate-200 space-y-2 text-xs">
+              <div class="flex justify-between text-slate-600">
+                <span>Subtotal dos Itens:</span>
+                <strong class="text-slate-900 text-sm" id="comanda-subtotal">R$ 0,00</strong>
+              </div>
+              
+              <!-- APLICAR CASHBACK DA SINUCA -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-grass-greenLight border border-grass-green/30">
+                <div class="flex items-center gap-2">
+                  <input type="checkbox" id="check-cashback" onchange="alternarCashback()" class="w-4 h-4 text-grass-green rounded accent-grass-green cursor-pointer">
+                  <label for="check-cashback" class="text-xs font-bold text-grass-greenDark cursor-pointer">
+                    Abater Cashback Acumulado da Sinuca
+                  </label>
+                </div>
+                <span class="text-xs font-black text-grass-greenDark" id="comanda-desconto">- R$ 0,00</span>
+              </div>
+
+              <!-- TOTAL FINAL -->
+              <div class="flex justify-between items-baseline pt-2 border-t border-slate-100">
+                <span class="text-slate-800 font-extrabold text-sm uppercase">Total a Cobrar:</span>
+                <span class="font-display font-black text-2xl text-win-blueDark" id="comanda-total">R$ 0,00</span>
+              </div>
+            </div>
+
+            <!-- BOTÕES DE FECHAMENTO -->
+            <div class="space-y-2 pt-2">
+              <button onclick="abrirModalFechamento()" class="w-full bg-grass-green hover:bg-grass-greenDark text-white font-extrabold text-sm py-3.5 px-4 rounded-2xl shadow-lg shadow-grass-green/30 transition-all flex items-center justify-center gap-2 active:scale-95">
+                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                Fechar Comanda (PIX / Cartão / Dinheiro)
+              </button>
+              <button onclick="limparComanda()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs py-2.5 rounded-xl transition-all">
+                Limpar Todos os Itens
+              </button>
+            </div>
+
+            <!-- AVISO DE CONTROLE AUTOMÁTICO DE ESTOQUE -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-500 flex items-center gap-2">
+              <i data-lucide="info" class="w-4 h-4 text-win-blue shrink-0"></i>
+              <span>Ao fechar, o sistema dá baixa automática no galão cheio e atualiza os cascos para o caminhão.</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MÓDULO 3: AS 4 TRILHAS DE LUCRO DA ÁGUA (ITEM 3 DO PDF) -->
+  <section id="trilhas-agua" class="py-16 md:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-win-blue text-white font-black flex items-center justify-center text-sm shadow-md">3</div>
+        <span class="text-xs sm:text-sm font-extrabold text-win-blue tracking-wider uppercase">Estratégia Comercial & Precificação</span>
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-slate-900 tracking-tight mb-2">
+        PLANO DE MARKETING: AS 4 TRILHAS DE LUCRO DA ÁGUA 10L
+      </h2>
+      <p class="text-sm sm:text-base text-slate-600 max-w-4xl mb-10 leading-relaxed">
+        Em vez de esperar o cliente lembrar de pedir água, transformamos sua tabela de preços em <strong>4 Trilhas de Lucro e Fidelização Ativa</strong> no sistema:
+      </p>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- TRILHA 1: SAÚDE PREMIUM -->
+        <div class="p-6 rounded-3xl bg-surface-bg border-t-4 border-win-blue card-shadow flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <span class="inline-block bg-win-blue text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full">
+              Trilha 1 • Alta Margem
+            </span>
+            <h3 class="font-display font-black text-xl text-slate-900">
+              Água Ibirá 10L
+            </h3>
+            <div class="text-2xl font-black text-win-blue">R$ 30,00</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Posicionada como água medicinal/premium (alto pH alcalino e vanádio). Maior lucro líquido por galão.
+            </p>
+            <div class="p-3 rounded-xl bg-win-blueLight text-xs font-semibold text-win-blueDark">
+              <strong>Clube Ibirá:</strong> 4 galões pagos no início do mês com mimo no bar e receita garantida.
+            </div>
+          </div>
+          <button onclick="adicionarItem('Água Ibirá 10L (Medicinal/Alcalina)', 30.00, 'agua')" class="w-full bg-win-blue hover:bg-win-blueDark text-white font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5">
+            <i data-lucide="plus" class="w-4 h-4"></i> Adicionar à Comanda
+          </button>
+        </div>
+
+        <!-- TRILHA 2: EQUILÍBRIO & GIRO SEMANAL -->
+        <div class="p-6 rounded-3xl bg-surface-bg border-t-4 border-slate-600 card-shadow flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <span class="inline-block bg-slate-700 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full">
+              Trilha 2 • Famílias
+            </span>
+            <h3 class="font-display font-black text-xl text-slate-900">
+              Aldeinha & Levíssima
+            </h3>
+            <div class="text-2xl font-black text-slate-800">R$ 17,00 <span class="text-xs text-slate-400 font-normal">/ R$ 16,00</span></div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Ideais para residências que buscam qualidade superior à água comum com excelente custo-benefício.
+            </p>
+            <div class="p-3 rounded-xl bg-slate-100 text-xs font-semibold text-slate-700">
+              <strong>Combo Duplo Semanal:</strong> Leve 2 galões de uma vez e economize tempo, dobrando o ticket.
+            </div>
+          </div>
+          <button onclick="adicionarItem('Água Aldeinha 10L', 17.00, 'agua')" class="w-full bg-slate-700 hover:bg-slate-900 text-white font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5">
+            <i data-lucide="plus" class="w-4 h-4"></i> Adicionar à Comanda
+          </button>
+        </div>
+
+        <!-- TRILHA 3: ALTO VOLUME -->
+        <div class="p-6 rounded-3xl bg-surface-bg border-t-4 border-amber-500 card-shadow flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <span class="inline-block bg-amber-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full">
+              Trilha 3 • Giro Rápido
+            </span>
+            <h3 class="font-display font-black text-xl text-slate-900">
+              Água Crystal (Refil)
+            </h3>
+            <div class="text-2xl font-black text-amber-700">R$ 13,00</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Produto campeão de volume para atrair vizinhos, novos moradores e quem frequenta a sinuca.
+            </p>
+            <div class="p-3 rounded-xl bg-amber-50 text-xs font-semibold text-amber-800">
+              <strong>Atração de Bairro:</strong> Porta de entrada para fidelizar e depois migrar para o Clube Ibirá.
+            </div>
+          </div>
+          <button onclick="adicionarItem('Água Crystal 10L (Refil)', 13.00, 'agua')" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5">
+            <i data-lucide="plus" class="w-4 h-4"></i> Adicionar à Comanda
+          </button>
+        </div>
+
+        <!-- TRILHA 4: TRAVA DE FIDELIDADE (CASCO COMPLETO) -->
+        <div class="p-6 rounded-3xl bg-grass-greenLight border-t-4 border-grass-green card-shadow flex flex-col justify-between space-y-4 ring-2 ring-grass-green/40">
+          <div class="space-y-3">
+            <span class="inline-block bg-grass-greenDark text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full">
+              Trilha 4 • Jogada de Mestre
+            </span>
+            <h3 class="font-display font-black text-xl text-grass-greenDark">
+              Crystal Completa (Casco)
+            </h3>
+            <div class="text-2xl font-black text-grass-greenDark">R$ 36,00</div>
+            <p class="text-xs text-slate-700 leading-relaxed">
+              O casco se torna propriedade do cliente. Lançamos a campanha do <strong>"2º Casco Reserva em Casa"</strong>.
+            </p>
+            <div class="p-3 rounded-xl bg-white border border-grass-green/30 text-xs font-semibold text-grass-greenDark">
+              <strong>Trava de Fidelidade:</strong> Quem tem 2 cascos em casa nunca compra no concorrente!
+            </div>
+          </div>
+          <button onclick="adicionarItem('Crystal 10L Completa (Com Casco)', 36.00, 'agua-casco')" class="w-full bg-grass-green hover:bg-grass-greenDark text-white font-extrabold text-xs py-2.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5">
+            <i data-lucide="shield-check" class="w-4 h-4"></i> Adicionar Casco R$ 36
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MÓDULO 4: WHATSAPP 24/7 & ANTECIPADOR DE DOMINGOS (ITEM 4 DO PDF) -->
+  <section id="whatsapp-domingo" class="py-16 md:py-24 bg-surface-bg border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-emerald-600 text-white font-black flex items-center justify-center text-sm shadow-md">4</div>
+        <span class="text-xs sm:text-sm font-extrabold text-emerald-700 tracking-wider uppercase">Automação Sem Fricção</span>
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-slate-900 tracking-tight mb-2">
+        FIM DO CELULAR NA MÃO + OPERAÇÃO "DOMINGO GARANTIDO"
+      </h2>
+      <p class="text-sm sm:text-base text-slate-600 max-w-4xl mb-10 leading-relaxed">
+        Como atender os <strong>130 clientes no WhatsApp sem encostar no celular</strong> e faturar o domingo mesmo de portas fechadas? Teste a simulação abaixo:
+      </p>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- CELULAR SIMULADO INTERATIVO DO WHATSAPP (5 COLS) -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="w-full max-w-sm rounded-[40px] bg-slate-900 p-4 shadow-2xl border-4 border-slate-700">
+            <!-- NOTCH -->
+            <div class="w-32 h-4 bg-slate-800 rounded-full mx-auto mb-3"></div>
+            
+            <!-- HEADER WHATSAPP -->
+            <div class="bg-[#075E54] text-white p-3 rounded-2xl flex items-center gap-3 shadow-md">
+              <div class="w-10 h-10 rounded-full bg-white text-win-blue flex items-center justify-center font-black text-sm">
+                H2O
+              </div>
+              <div class="flex-1">
+                <span class="font-bold text-sm block">H2O Balcão Inteligente</span>
+                <span class="text-[10px] text-emerald-200 flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> online agora (Robô IA)
+                </span>
+              </div>
+              <i data-lucide="more-vertical" class="w-5 h-5 text-slate-200"></i>
+            </div>
+
+            <!-- CHAT SCREEN -->
+            <div class="bg-[#EFEAE2] rounded-2xl p-3 my-3 h-80 overflow-y-auto space-y-2.5 text-xs text-slate-800" id="chat-box">
+              
+              <!-- Mensagem do Cliente -->
+              <div class="bg-white p-2.5 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm space-y-1">
+                <p>Olá, Luiz! Preciso de um galão de 10L aqui em casa.</p>
+                <span class="text-[9px] text-slate-400 block text-right">14:02</span>
+              </div>
+
+              <!-- Mensagem Automática do Robô -->
+              <div class="bg-[#DCF8C6] p-2.5 rounded-2xl rounded-tr-none ml-auto max-w-[88%] shadow-sm space-y-2">
+                <p class="font-bold text-[#075E54]">Olá! Depósito H2O responde:</p>
+                <p>Qual água você deseja receber em instantes?</p>
+                <div class="space-y-1 pt-1">
+                  <button onclick="simularEscolhaZap('Água Ibirá 10L (R$ 30,00)')" class="w-full bg-white hover:bg-slate-50 text-slate-800 font-bold p-1.5 rounded-lg border border-slate-300 text-left flex justify-between">
+                    <span>1. Ibirá Medicinal</span> <span class="text-grass-greenDark">R$ 30</span>
+                  </button>
+                  <button onclick="simularEscolhaZap('Água Aldeinha 10L (R$ 17,00)')" class="w-full bg-white hover:bg-slate-50 text-slate-800 font-bold p-1.5 rounded-lg border border-slate-300 text-left flex justify-between">
+                    <span>2. Aldeinha</span> <span class="text-grass-greenDark">R$ 17</span>
+                  </button>
+                  <button onclick="simularEscolhaZap('Água Crystal 10L (R$ 13,00)')" class="w-full bg-white hover:bg-slate-50 text-slate-800 font-bold p-1.5 rounded-lg border border-slate-300 text-left flex justify-between">
+                    <span>3. Crystal Refil</span> <span class="text-grass-greenDark">R$ 13</span>
+                  </button>
+                </div>
+                <span class="text-[9px] text-slate-400 block text-right">14:02 ✓✓</span>
+              </div>
+
+            </div>
+
+            <!-- INPUT WHATSAPP -->
+            <div class="bg-white p-2 rounded-2xl flex items-center gap-2 text-slate-400">
+              <i data-lucide="smile" class="w-5 h-5"></i>
+              <span class="text-xs text-slate-400 flex-1">Autoatendimento ativado...</span>
+              <i data-lucide="send" class="w-5 h-5 text-[#075E54]"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPLICAÇÃO E ANTECIPADOR DE DOMINGOS (7 COLS) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <div class="bg-white p-6 rounded-3xl card-shadow border border-slate-200 space-y-4">
+            <h3 class="font-display font-black text-xl text-slate-900 flex items-center gap-2">
+              <i data-lucide="zap" class="w-6 h-6 text-emerald-600"></i>
+              Como Funciona a Mágica na Prática:
+            </h3>
+            <ul class="space-y-3 text-xs sm:text-sm text-slate-600">
+              <li class="flex items-start gap-3">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+                <span><strong>Zero Digitação:</strong> O cliente escolhe com 1 toque no celular dele e o pedido cai <strong>sonorizado e pronto na tela do balcão</strong>.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 mt-0.5">2</span>
+                <span><strong>Cross-selling Automático:</strong> O robô pergunta se quer adicionar cerveja gelada, refrigerante ou gelo na mesma entrega.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- RADAR DE GALÃO VAZIO (SEXTA & SÁBADO) -->
+          <div class="bg-gradient-to-br from-win-blueDeep to-win-blueDark p-6 sm:p-8 rounded-3xl text-white space-y-4 shadow-xl">
+            <div class="flex items-center justify-between">
+              <span class="bg-grass-green text-slate-900 text-xs font-black uppercase px-3 py-1 rounded-full">
+                Radar de Galão Vazio
+              </span>
+              <span class="text-xs text-slate-300">Sexta 14h00 & Sábado 09h30</span>
+            </div>
+            
+            <h4 class="font-display font-black text-xl sm:text-2xl text-white">
+              Operação "Faturar o Domingo Antecipado"
+            </h4>
+            
+            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+              Como você não abre aos domingos, o sistema analisa quem está há mais de 5 dias sem pedir água e dispara no WhatsApp:
+            </p>
+
+            <div class="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-sm italic text-emerald-200">
+              "Olá, Carlos! Domingo nossa loja estará fechada. Garanta seu galão de água hoje e que tal já incluir cerveja gelada ou refrigerante na mesma entrega?"
+            </div>
+
+            <div class="pt-2 flex flex-wrap items-center gap-3">
+              <button onclick="dispararRadarDemo()" class="bg-grass-green hover:bg-grass-greenDark text-slate-900 hover:text-white font-extrabold text-xs sm:text-sm py-3 px-5 rounded-xl shadow-lg transition-all active:scale-95 flex items-center gap-2">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                Simular Disparo do Radar para os 130 Clientes
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MÓDULO 5: O CAMINHÃO DIÁRIO (VAZIOS X CHEIOS) (ITEM 5 DO PDF) -->
+  <section id="caminhao-cascos" class="py-16 md:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-amber-600 text-white font-black flex items-center justify-center text-sm shadow-md">5</div>
+        <span class="text-xs sm:text-sm font-extrabold text-amber-700 tracking-wider uppercase">Logística & Estoque Crítico</span>
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-slate-900 tracking-tight mb-2">
+        O CAMINHÃO DIÁRIO: GESTÃO DE VAZIOS X CHEIOS
+      </h2>
+      <p class="text-sm sm:text-base text-slate-600 max-w-4xl mb-10 leading-relaxed">
+        O caminhão passa apenas <strong>1 vez por dia</strong>. Um erro de contagem trava sua venda do dia seguinte. O painel calcula tudo sozinho:
+      </p>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- ESTOQUE ATUAL EM TEMPO REAL (8 COLS) -->
+        <div class="lg:col-span-8 bg-surface-bg p-6 sm:p-8 rounded-3xl card-shadow border border-slate-200 space-y-6">
+          
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+            <div>
+              <span class="text-xs font-bold text-slate-500 uppercase">Status do Estoque de Hoje</span>
+              <h3 class="font-display font-black text-xl text-slate-900">Conferência Diária de Galões</h3>
+            </div>
+            <button onclick="simularTrocaCaminhao()" class="bg-win-blue hover:bg-win-blueDark text-white font-bold text-xs py-2.5 px-4 rounded-xl shadow transition-all flex items-center gap-1.5">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i> Simular Chegada do Caminhão
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            
+            <div class="p-4 rounded-2xl bg-white border border-slate-200">
+              <span class="text-[11px] font-bold text-slate-500 uppercase block mb-1">Água Ibirá 10L</span>
+              <div class="font-display font-black text-2xl text-win-blue" id="est-ibira-cheio">18</div>
+              <span class="text-[10px] text-slate-400 block">Cheios em loja</span>
+              <div class="mt-2 pt-2 border-t border-slate-100 font-bold text-xs text-amber-600">
+                <span id="est-ibira-vazio">12</span> Cascos Vazios
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-white border border-slate-200">
+              <span class="text-[11px] font-bold text-slate-500 uppercase block mb-1">Água Aldeinha</span>
+              <div class="font-display font-black text-2xl text-win-blue" id="est-aldeinha-cheio">25</div>
+              <span class="text-[10px] text-slate-400 block">Cheios em loja</span>
+              <div class="mt-2 pt-2 border-t border-slate-100 font-bold text-xs text-amber-600">
+                <span id="est-aldeinha-vazio">19</span> Cascos Vazios
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-white border border-slate-200">
+              <span class="text-[11px] font-bold text-slate-500 uppercase block mb-1">Água Levíssima</span>
+              <div class="font-display font-black text-2xl text-win-blue" id="est-levissima-cheio">22</div>
+              <span class="text-[10px] text-slate-400 block">Cheios em loja</span>
+              <div class="mt-2 pt-2 border-t border-slate-100 font-bold text-xs text-amber-600">
+                <span id="est-levissima-vazio">16</span> Cascos Vazios
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-white border border-slate-200">
+              <span class="text-[11px] font-bold text-slate-500 uppercase block mb-1">Crystal Refil</span>
+              <div class="font-display font-black text-2xl text-win-blue" id="est-crystal-cheio">40</div>
+              <span class="text-[10px] text-slate-400 block">Cheios em loja</span>
+              <div class="mt-2 pt-2 border-t border-slate-100 font-bold text-xs text-amber-600">
+                <span id="est-crystal-vazio">31</span> Cascos Vazios
+              </div>
+            </div>
+
+          </div>
+
+          <!-- AVISO DE CASCOS VENDIDOS A R$ 36 (QUE FICARAM COM O CLIENTE) -->
+          <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-grass-green flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-grass-green text-white flex items-center justify-center font-bold">
+                <i data-lucide="package-plus" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <strong class="text-xs sm:text-sm text-slate-900 block font-black">
+                  Cascos Vendidos Definitivos (R$ 36): <span id="est-cascos-vendidos" class="text-grass-greenDark font-black">4 unidades</span>
+                </strong>
+                <span class="text-xs text-slate-600">
+                  O sistema avisa para comprar 4 cascos novos da distribuidora para o giro não cair.
+                </span>
+              </div>
+            </div>
+            <span class="text-xs font-black bg-grass-greenDark text-white px-3 py-1.5 rounded-lg shrink-0">
+              Repor no Caminhão
+            </span>
+          </div>
+
+        </div>
+
+        <!-- RESUMO PRÉ-CAMINHÃO (4 COLS) -->
+        <div class="lg:col-span-4 bg-win-blueDeep text-white p-6 sm:p-7 rounded-3xl space-y-4 shadow-xl">
+          <div class="flex items-center gap-2 text-amber-400 text-xs font-extrabold uppercase">
+            <i data-lucide="clock" class="w-4 h-4"></i> Alerta Pré-Caminhão (30 min)
+          </div>
+          <h4 class="font-display font-black text-xl text-white">Lista Exata para o Motorista</h4>
+          <p class="text-xs text-slate-300">
+            A tela mostra a relação mastigada para entregar ao entregador sem ter que contar galão na correria:
+          </p>
+          <div class="space-y-2 text-xs bg-white/10 p-4 rounded-2xl border border-white/20">
+            <div class="flex justify-between">
+              <span>Devolver Vazios Ibirá:</span> <strong class="text-white">12 cascos</strong>
+            </div>
+            <div class="flex justify-between">
+              <span>Devolver Vazios Aldeinha:</span> <strong class="text-white">19 cascos</strong>
+            </div>
+            <div class="flex justify-between">
+              <span>Devolver Vazios Levíssima:</span> <strong class="text-white">16 cascos</strong>
+            </div>
+            <div class="flex justify-between">
+              <span>Devolver Vazios Crystal:</span> <strong class="text-white">31 cascos</strong>
+            </div>
+            <div class="flex justify-between pt-2 border-t border-white/20 text-emerald-300 font-bold">
+              <span>Total de Cheios a Receber:</span> <strong>78 galões + 4 novos</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MÓDULO 6 & 7: SINUCA COM CASHBACK & CONCEITO VIP LOUNGE EXPRESS 3 MÁQUINAS -->
+  <section id="sinuca-lounge" class="py-16 md:py-24 bg-surface-bg border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-grass-greenDark text-white font-black flex items-center justify-center text-sm shadow-md">6/7</div>
+        <span class="text-xs sm:text-sm font-extrabold text-grass-greenDark tracking-wider uppercase">Monetização de Bar & Jogos</span>
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-slate-900 tracking-tight mb-2">
+        SINUCA COM CASHBACK & "VIP LOUNGE EXPRESS" NAS 3 MÁQUINAS
+      </h2>
+      <p class="text-sm sm:text-base text-slate-600 max-w-4xl mb-10 leading-relaxed">
+        Como transformar quem está jogando sinuca ou nas 3 máquinas físicas no fundo em receita contínua para o bar e para a venda de galões de água:
+      </p>
+
+      <div class="grid lg:grid-cols-2 gap-8">
+        
+        <!-- PARTE 1: SINUCA & CASHBACK NA ÁGUA -->
+        <div class="bg-white p-6 sm:p-8 rounded-3xl card-shadow border-t-4 border-win-blue space-y-6">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-win-blueLight text-win-blue flex items-center justify-center font-black">
+                🎱
+              </div>
+              <div>
+                <h3 class="font-display font-black text-xl text-slate-900">Mesa de Sinuca & Torneios</h3>
+                <span class="text-xs text-slate-500">Comanda rápida sem parar o jogo</span>
+              </div>
+            </div>
+            <span class="bg-grass-greenLight text-grass-greenDark text-xs font-black px-3 py-1 rounded-full">
+              Cashback Ativo
+            </span>
+          </div>
+
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Os jogadores abrem comanda ao redor da mesa. Fichas e cervejas são lançadas sem precisar cobrar a cada tacada.
+          </p>
+
+          <!-- MECÂNICA DE CASHBACK -->
+          <div class="p-5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-grass-green/30 space-y-3">
+            <div class="flex justify-between items-center text-xs font-bold text-grass-greenDark">
+              <span>Regra de Cashback da Sinuca:</span>
+              <span class="bg-grass-green text-white px-2 py-0.5 rounded text-[10px]">R$ 50 = R$ 3,00 bônus</span>
+            </div>
+            <p class="text-xs text-slate-700">
+              A cada R$ 50 consumidos em bebidas/sinuca, o jogador ganha <strong>R$ 3,00 de crédito</strong> no perfil dele para abater na compra de uma <strong>Água Ibirá (R$ 30) ou Galão Completo (R$ 36)</strong> para levar para casa!
+            </p>
+          </div>
+
+          <button onclick="adicionarItem('Ficha de Mesa de Sinuca', 4.00, 'sinuca')" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+            <i data-lucide="plus-circle" class="w-4 h-4 text-grass-green"></i> Lançar Ficha de Sinuca (R$ 4,00)
+          </button>
+        </div>
+
+        <!-- PARTE 2: CONCEITO VIP LOUNGE NAS 3 MÁQUINAS DO FUNDO -->
+        <div class="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl card-shadow border-t-4 border-grass-green space-y-6">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-grass-green/20 text-grass-green flex items-center justify-center font-black">
+                🎰
+              </div>
+              <div>
+                <h3 class="font-display font-black text-xl text-white">VIP Lounge: As 3 Máquinas</h3>
+                <span class="text-xs text-slate-400">O segredo psicológico do jogador</span>
+              </div>
+            </div>
+            <span class="bg-white/10 text-grass-green text-xs font-bold px-3 py-1 rounded-full border border-grass-green/30">
+              Foco Total
+            </span>
+          </div>
+
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Quem está sentado jogando nas 3 máquinas no fundo não levanta para não quebrar a sorte nem perder a máquina. Com o <strong>Adesivo Garçom Express</strong>, ele pede da cadeira!
+          </p>
+
+          <!-- BOTÕES INTERATIVOS DAS 3 MÁQUINAS -->
+          <div class="grid grid-cols-3 gap-3 pt-1">
+            <button onclick="simularPedidoMaquina(1)" class="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-grass-green text-center transition-all group">
+              <span class="text-[10px] text-grass-green font-black block">MÁQUINA 01</span>
+              <span class="text-xs font-bold text-white block mt-1">Pedir na Cadeira</span>
+              <span class="text-[10px] text-slate-400 group-hover:text-white">Garçom Express</span>
+            </button>
+
+            <button onclick="simularPedidoMaquina(2)" class="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-grass-green text-center transition-all group">
+              <span class="text-[10px] text-grass-green font-black block">MÁQUINA 02</span>
+              <span class="text-xs font-bold text-white block mt-1">Pedir na Cadeira</span>
+              <span class="text-[10px] text-slate-400 group-hover:text-white">Garçom Express</span>
+            </button>
+
+            <button onclick="simularPedidoMaquina(3)" class="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-grass-green text-center transition-all group">
+              <span class="text-[10px] text-grass-green font-black block">MÁQUINA 03</span>
+              <span class="text-xs font-bold text-white block mt-1">Pedir na Cadeira</span>
+              <span class="text-[10px] text-slate-400 group-hover:text-white">Garçom Express</span>
+            </button>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-xs text-slate-300 space-y-1">
+            <strong class="text-grass-green block">Vale 5 Galões Garantidos:</strong>
+            <span>Quando o jogador ganha na máquina, o sistema sugere converter parte do prêmio no "Vale Água", garantindo dinheiro vivo no seu caixa!</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MÓDULO 8: SIMULADOR DE IMPACTO FINANCEIRO & FATURAMENTO ADICIONAL -->
+  <section id="simulador" class="py-16 md:py-24 bg-win-blueDeep text-white border-b border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3 mb-12">
+        <span class="bg-grass-green text-slate-900 text-xs font-black uppercase px-3.5 py-1.5 rounded-full">
+          Simulador Interativo
+        </span>
+        <h2 class="font-display font-black text-3xl sm:text-5xl text-white tracking-tight">
+          QUANTO O ECOSSISTEMA COLOCA NO SEU BOLSO A MAIS?
+        </h2>
+        <p class="text-sm sm:text-base text-slate-300">
+          Arraste a barra abaixo com a sua base de clientes e veja o ganho real somando a antecipação de domingos, a venda do 2º casco e o giro do lounge:
+        </p>
+      </div>
+
+      <!-- PAINEL SIMULADOR -->
+      <div class="bg-white/10 backdrop-blur-xl border border-white/20 p-6 sm:p-10 rounded-3xl space-y-8 shadow-2xl">
+        
+        <!-- CONTROLE REGUA -->
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-sm sm:text-base font-bold text-slate-200">Base Ativa de Clientes Recorrentes de Água:</span>
+            <span class="font-display font-black text-2xl sm:text-3xl text-grass-green" id="sim-clientes-label">130 clientes</span>
+          </div>
+          <input type="range" min="60" max="300" value="130" step="5" oninput="atualizarSimuladorLucro(this.value)" class="w-full h-3 bg-white/20 rounded-lg appearance-none cursor-pointer custom-slider">
+          <div class="flex justify-between text-[11px] text-slate-400">
+            <span>60 clientes</span>
+            <span class="text-grass-green font-bold">130 clientes (Sua Base Atual)</span>
+            <span>300 clientes (Expansão)</span>
+          </div>
+        </div>
+
+        <!-- RESULTADOS CALCULADOS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/10">
+          
+          <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+            <span class="text-xs text-slate-300 block mb-1">1. Domingo Antecipado (Radar)</span>
+            <div class="font-display font-black text-xl sm:text-2xl text-white" id="sim-domingo">R$ 2.450,00</div>
+            <span class="text-[10px] text-slate-400 mt-1 block">Água + Cervejas na Sexta/Sáb</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+            <span class="text-xs text-slate-300 block mb-1">2. Fidelidade 2º Casco (R$ 36)</span>
+            <div class="font-display font-black text-xl sm:text-2xl text-white" id="sim-casco">R$ 1.170,00</div>
+            <span class="text-[10px] text-slate-400 mt-1 block">Trava definitiva de clientes</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+            <span class="text-xs text-slate-300 block mb-1">3. Sinuca & 3 Máquinas</span>
+            <div class="font-display font-black text-xl sm:text-2xl text-white" id="sim-lounge">R$ 2.100,00</div>
+            <span class="text-[10px] text-slate-400 mt-1 block">Garçom Express + Cashback</span>
+          </div>
+
+        </div>
+
+        <!-- TOTAL ADICIONAL ESTIMADO -->
+        <div class="p-6 rounded-2xl bg-gradient-to-r from-grass-greenDark to-grass-green text-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+          <div>
+            <span class="text-xs font-black uppercase tracking-wider block text-slate-900/80">Lucro Adicional Estimado no Caixa por Mês:</span>
+            <div class="font-display font-black text-3xl sm:text-4xl text-slate-950" id="sim-total-adicional">
+              + R$ 5.720,00 / mês
+            </div>
+          </div>
+          <button onclick="abrirModalProposta()" class="bg-slate-950 hover:bg-slate-900 text-white font-extrabold text-xs sm:text-sm py-3.5 px-6 rounded-xl shadow transition-all active:scale-95 shrink-0">
+            Ver Proposta Comercial Completa
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MÓDULO 8 DO PDF: PLANO DE IMPLANTAÇÃO PRÁTICA (3 ETAPAS) -->
+  <section class="py-16 md:py-24 bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-9 h-9 rounded-full bg-win-blue text-white font-black flex items-center justify-center text-sm shadow-md">8</div>
+        <span class="text-xs sm:text-sm font-extrabold text-win-blue tracking-wider uppercase">Cronograma de Entrega</span>
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-4xl text-slate-900 tracking-tight mb-2">
+        PLANO DE IMPLANTAÇÃO PRÁTICA — RESULTADO RÁPIDO
+      </h2>
+      <p class="text-sm sm:text-base text-slate-600 max-w-4xl mb-10 leading-relaxed">
+        Um sistema leve, bonito e direto ao ponto, feito sob medida para a rotina do <strong>Luiz Fernando</strong>, funcionando pelo computador, tablet ou celular:
+      </p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        
+        <!-- ETAPA 1 -->
+        <div class="p-6 rounded-3xl bg-surface-bg border-2 border-win-blue card-shadow space-y-4">
+          <span class="text-xs font-black text-win-blue uppercase tracking-wider block">Etapa 1</span>
+          <h3 class="font-display font-black text-lg text-slate-900">
+            Balcão & Perfis de Clientes
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Implantação do Sistema de Perfil 360º de Clientes, Comanda Digital (Bebidas, Sinuca e Porções) e parametrização das 4 marcas de água + Casco Crystal.
+          </p>
+          <div class="pt-3 border-t border-slate-200 font-black text-win-blueDark text-xs uppercase">
+            Pronto para Uso Imediato
+          </div>
+        </div>
+
+        <!-- ETAPA 2 -->
+        <div class="p-6 rounded-3xl bg-surface-bg border-2 border-emerald-500 card-shadow space-y-4">
+          <span class="text-xs font-black text-emerald-600 uppercase tracking-wider block">Etapa 2</span>
+          <h3 class="font-display font-black text-lg text-slate-900">
+            WhatsApp & Caminhão
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Ativação do Autoatendimento para os 130 clientes, disparo do Radar Sexta/Sábado (Domingo Garantido) e Painel de Troca Diária do Caminhão.
+          </p>
+          <div class="pt-3 border-t border-slate-200 font-black text-emerald-700 text-xs uppercase">
+            Zero Celular na Mão
+          </div>
+        </div>
+
+        <!-- ETAPA 3 -->
+        <div class="p-6 rounded-3xl bg-grass-greenLight border-2 border-grass-green card-shadow space-y-4">
+          <span class="text-xs font-black text-grass-greenDark uppercase tracking-wider block">Etapa 3</span>
+          <h3 class="font-display font-black text-lg text-grass-greenDark">
+            Lounge 3 Máquinas & Sinuca
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            Instalação dos pedidos rápidos nas 3 máquinas físicas no fundo da loja + Programa de Fidelidade e Cashback da Sinuca na Água.
+          </p>
+          <div class="pt-3 border-t border-grass-green/30 font-black text-grass-greenDark text-xs uppercase">
+            Aumento Real de Ticket
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RODAPÉ CORPORATIVO & ASSINATURA -->
+  <footer class="bg-win-blueDeep text-white border-t-4 border-grass-green py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8">
+        
+        <div class="space-y-4 md:col-span-2">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white p-1.5 flex items-center justify-center">
+              <span class="font-display font-black text-win-blue text-lg">H<sub>2</sub>O</span>
+            </div>
+            <span class="font-display font-black text-xl text-white">
+              ECOSSISTEMA <span class="text-grass-green">H2O</span>
+            </span>
+          </div>
+          <p class="text-xs text-slate-300 max-w-md leading-relaxed">
+            <strong>Plano Diretor de Automação, Comanda Digital & Alavancagem de Vendas</strong><br>
+            Depósito de Água, Bar de Balcão, Mesa de Sinuca & Lounge das 3 Máquinas.<br>
+            Apresentado Exclusivamente Para: <strong>Sr. Luiz Fernando</strong>.
+          </p>
+          <div class="text-xs text-slate-400">
+            Consultor & Arquiteto: <strong>Glaucio Pires Pontes</strong><br>
+            Estratégia Digital, Automação de Negócios & Nuvem de Alta Performance.
+          </div>
+        </div>
+
+        <div class="space-y-2 text-xs text-slate-300">
+          <span class="font-bold text-white text-sm block mb-1">Navegação Rápida</span>
+          <a href="#balcao-comanda" class="block hover:text-grass-green">Balcão & Comanda Digital</a>
+          <a href="#trilhas-agua" class="block hover:text-grass-green">4 Trilhas da Água 10L</a>
+          <a href="#whatsapp-domingo" class="block hover:text-grass-green">Robô WhatsApp & Domingo</a>
+          <a href="#caminhao-cascos" class="block hover:text-grass-green">Painel do Caminhão</a>
+          <a href="#sinuca-lounge" class="block hover:text-grass-green">Sinuca & 3 Máquinas</a>
+          <a href="#simulador" class="block hover:text-grass-green">Simulador de Lucro</a>
+        </div>
+
+        <div class="space-y-3 text-xs text-slate-300">
+          <span class="font-bold text-white text-sm block mb-1">Documentos Oficiais</span>
+          <button onclick="abrirModalProposta()" class="w-full bg-grass-green hover:bg-grass-greenDark text-slate-900 font-black py-2.5 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            Ver Proposta Completa
+          </button>
+          <a href="Proposta_Comercial_Luiz_Fernando.pdf" download class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-2 border border-white/20">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            Baixar Proposta em PDF
+          </a>
+          <p class="text-[11px] text-slate-400">
+            Versão 1.0 Executiva e Homologada.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="mt-12 pt-6 border-t border-slate-800 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <span>&copy; 2026 Ecossistema H2O. Todos os direitos reservados.</span>
+        <span>Desenvolvido sob medida para Luiz Fernando por Glaucio Pires Pontes.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: VISUALIZADOR DA PROPOSTA COMERCIAL COMPLETA      -->
+  <!-- ======================================================== -->
+  <div id="modal-proposta" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl relative overflow-hidden border border-slate-300">
+      
+      <!-- HEADER DO MODAL -->
+      <div class="p-5 bg-win-blueDark text-white flex items-center justify-between border-b border-win-blue">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-grass-green text-slate-900 flex items-center justify-center font-black">
+            <i data-lucide="file-check-2" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-display font-black text-base sm:text-lg">Proposta Comercial Oficial — Ecossistema H2O</h3>
+            <span class="text-xs text-emerald-200">Apresentado para o Sr. Luiz Fernando • Novembro 2026</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="Proposta_Comercial_Luiz_Fernando.pdf" download class="hidden sm:inline-flex items-center gap-1.5 bg-grass-green hover:bg-grass-greenDark text-slate-900 font-bold text-xs py-2 px-3 rounded-lg transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i> Baixar PDF
+          </a>
+          <button onclick="fecharModalProposta()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- CORPO DA PROPOSTA (ROLÁVEL) -->
+      <div class="p-6 sm:p-8 overflow-y-auto space-y-6 text-sm text-slate-800 leading-relaxed">
+        
+        <div class="border-b border-slate-200 pb-4">
+          <span class="text-xs font-black text-win-blue uppercase tracking-wider">Documento Oficial</span>
+          <h2 class="font-display font-black text-2xl text-slate-900 mt-1">
+            PLANO DIRETOR DE AUTOMAÇÃO, COMANDA DIGITAL & ALAVANCAGEM DE VENDAS
+          </h2>
+          <div class="flex flex-wrap gap-4 text-xs text-slate-500 mt-2">
+            <span><strong>Destinatário:</strong> Sr. Luiz Fernando</span>
+            <span>•</span>
+            <span><strong>Emissor:</strong> Glaucio Pires Pontes</span>
+            <span>•</span>
+            <span><strong>Base:</strong> 130+ Clientes de Água</span>
+          </div>
+        </div>
+
+        <!-- SEÇÕES DA PROPOSTA -->
+        <div class="space-y-4">
+          <h4 class="font-bold text-win-blueDark text-base flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-win-blue text-white text-xs flex items-center justify-center">1</span>
+            Diagnóstico dos 3 Gargalos Operacionais
+          </h4>
+          <p class="text-xs sm:text-sm text-slate-600">
+            A rotina diária no balcão é interrompida por mensagens manuais no WhatsApp para atender 130 clientes. Clientes da sinuca e das máquinas físicas consomem produtos picados com risco de esquecimento na cobrança manual. Aos domingos a loja fecha (fuga de clientes para concorrentes) e o caminhão passa apenas 1 vez ao dia para troca de vasilhames.
+          </p>
+
+          <h4 class="font-bold text-win-blueDark text-base flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-win-blue text-white text-xs flex items-center justify-center">2</span>
+            Sistema de Perfil de Clientes 360º & Comanda Digital
+          </h4>
+          <p class="text-xs sm:text-sm text-slate-600">
+            Abertura de perfil em 1 clique por nome ou apelido. Lançamento rápido de águas, bebidas geladas, salgados e fichas de sinuca. Fechamento ágil com cálculo de troco e PIX dinâmico com zero erro de soma.
+          </p>
+
+          <h4 class="font-bold text-win-blueDark text-base flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-win-blue text-white text-xs flex items-center justify-center">3</span>
+            As 4 Trilhas de Lucro da Água 10 Litros
+          </h4>
+          <p class="text-xs sm:text-sm text-slate-600">
+            <strong>Trilha 1 (Ibirá R$ 30,00):</strong> Saúde premium e maior margem unitária (Clube Ibirá com 4 galões antecipados).<br>
+            <strong>Trilha 2 (Aldeinha R$ 17,00 & Levíssima R$ 16,00):</strong> Equilíbrio e giro para famílias (Combo Duplo Semanal).<br>
+            <strong>Trilha 3 (Crystal Refil R$ 13,00):</strong> Alto volume e atração diária da vizinhança.<br>
+            <strong>Trilha 4 (Crystal Completa R$ 36,00):</strong> Trava de fidelidade ("2º Casco Reserva em Casa").
+          </p>
+
+          <h4 class="font-bold text-win-blueDark text-base flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-win-blue text-white text-xs flex items-center justify-center">4</span>
+            Fim do Celular na Mão & Radar de Domingo
+          </h4>
+          <p class="text-xs sm:text-sm text-slate-600">
+            Autoatendimento no WhatsApp 24/7 com zero digitação: pedidos apitam prontos no balcão. Disparos programados na Sexta (14h) e Sábado (09h30) para antecipar água e vender cerveja gelada na mesma viagem.
+          </p>
+
+          <h4 class="font-bold text-win-blueDark text-base flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-win-blue text-white text-xs flex items-center justify-center">5</span>
+            Logística do Caminhão Diário (Vazios x Cheios)
+          </h4>
+          <p class="text-xs sm:text-sm text-slate-600">
+            Baixa automática no cheio e soma no vazio a cada venda. Resumo pré-caminhão 30 minutos antes para o Luiz entregar o pedido exato ao motorista.
+          </p>
+
+          <h4 class="font-bold text-win-blueDark text-base flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-win-blue text-white text-xs flex items-center justify-center">6</span>
+            Sinuca com Cashback & VIP Lounge nas 3 Máquinas
+          </h4>
+          <p class="text-xs sm:text-sm text-slate-600">
+            A cada R$ 50 gastos na sinuca/bar, o cliente ganha R$ 3 de bônus para abater na compra de água. Nas 3 máquinas do fundo, adesivo VIP "Garçom Express" permite pedir cerveja e salgado sem levantar da cadeira!
+          </p>
+
+          <h4 class="font-bold text-win-blueDark text-base flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-win-blue text-white text-xs flex items-center justify-center">7</span>
+            Plano de Implantação em 3 Etapas
+          </h4>
+          <p class="text-xs sm:text-sm text-slate-600">
+            Etapa 1 (Balcão & Perfis) -> Etapa 2 (WhatsApp & Caminhão) -> Etapa 3 (Lounge 3 Máquinas).
+          </p>
+        </div>
+
+      </div>
+
+      <!-- FOOTER DO MODAL -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+        <span class="text-xs text-slate-500">Desenvolvido por Glaucio Pires Pontes</span>
+        <div class="flex items-center gap-2">
+          <a href="Proposta_Comercial_Luiz_Fernando.pdf" download class="bg-win-blue hover:bg-win-blueDark text-white font-bold text-xs py-2 px-4 rounded-xl transition-all flex items-center gap-1.5">
+            <i data-lucide="download" class="w-4 h-4"></i> Baixar Arquivo PDF
+          </a>
+          <button onclick="fecharModalProposta()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs py-2 px-4 rounded-xl transition-all">
+            Fechar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: FECHAMENTO DE COMANDA COM PAGAMENTO               -->
+  <!-- ======================================================== -->
+  <div id="modal-fechamento" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 text-slate-900 space-y-4 shadow-2xl relative border border-slate-200">
+      <button onclick="fecharModalFechamento()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-grass-greenLight text-grass-greenDark flex items-center justify-center font-black">
+        <i data-lucide="wallet" class="w-6 h-6"></i>
+      </div>
+
+      <div>
+        <h3 class="font-display font-black text-xl text-slate-900">Fechar Comanda do Balcão</h3>
+        <p class="text-xs text-slate-500 mt-0.5" id="modal-cliente-resumo">Cliente: Seu Carlos</p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-win-blueLight/50 border border-win-blue/20 text-center space-y-1">
+        <span class="text-xs text-slate-500 uppercase font-bold">Valor Total a Receber</span>
+        <div class="font-display font-black text-3xl text-win-blueDark" id="modal-valor-total">R$ 0,00</div>
+      </div>
+
+      <!-- SELEÇÃO DE FORMA DE PAGAMENTO -->
+      <div class="space-y-2">
+        <span class="text-xs font-bold text-slate-700 block">Escolha a Forma de Pagamento:</span>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="selecionarPagamento('PIX')" id="btn-pag-pix" class="pag-btn active p-2.5 rounded-xl border-2 border-grass-green bg-grass-greenLight text-xs font-bold text-grass-greenDark text-center transition-all">
+            📱 PIX Instantâneo
+          </button>
+          <button onclick="selecionarPagamento('CARTAO')" id="btn-pag-cartao" class="pag-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 text-center transition-all">
+            💳 Cartão
+          </button>
+          <button onclick="selecionarPagamento('DINHEIRO')" id="btn-pag-dinheiro" class="pag-btn p-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 text-center transition-all">
+            💵 Dinheiro
+          </button>
+        </div>
+      </div>
+
+      <!-- QR CODE PIX SIMULADO -->
+      <div id="area-pix" class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-2">
+        <div class="w-32 h-32 mx-auto bg-white p-2 border border-slate-200 rounded-xl flex items-center justify-center shadow-inner">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=H2O-PAGAMENTO-DEPOSITO-BALCAO" alt="QR Code PIX" class="w-full h-full object-contain">
+        </div>
+        <p class="text-[11px] text-slate-500">Aponte o celular ou use o Copia e Cola. Baixa automática em menos de 3 segundos.</p>
+      </div>
+
+      <div class="space-y-2 pt-2">
+        <button onclick="confirmarRecebimento()" class="w-full bg-grass-green hover:bg-grass-greenDark text-white font-black py-3.5 rounded-xl text-sm transition-all shadow-lg shadow-grass-green/30 flex items-center justify-center gap-2 active:scale-95">
+          <i data-lucide="check" class="w-5 h-5"></i> Confirmar Recebimento & Baixa no Estoque
+        </button>
+        <button onclick="fecharModalFechamento()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition-all">
+          Voltar para a Comanda
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT JS INTERATIVO COMPLETO -->
+  <script>
+    // Inicialização do Lucide Icons
+    lucide.createIcons();
+
+    // ESTADO DA COMANDA EM MEMÓRIA
+    let clienteAtual = 'carlos';
+    let itensComanda = [];
+    let aplicarDescontoCashback = false;
+
+    const clientesDados = {
+      'carlos': {
+        nome: 'Seu Carlos (Barata)',
+        agua: 'Água Ibirá 10L',
+        casco: 'Sim (2 Cascos)',
+        cashback: 6.00,
+        freq: 'Semanal (6 dias)'
+      },
+      'marcos': {
+        nome: 'Marcos Pedreiro',
+        agua: 'Água Aldeinha 10L',
+        casco: 'Sim (1 Casco)',
+        cashback: 0.00,
+        freq: 'A cada 8 dias'
+      },
+      'renato': {
+        nome: 'Renato (Mesa Sinuca)',
+        agua: 'Água Crystal (Refil)',
+        casco: 'Não (Usa do depósito)',
+        cashback: 9.00,
+        freq: 'Joga 3x por semana'
+      },
+      'dona-neide': {
+        nome: 'Dona Neide',
+        agua: 'Água Levíssima 10L',
+        casco: 'Sim (2 Cascos)',
+        cashback: 3.00,
+        freq: 'A cada 10 dias'
+      }
+    };
+
+    // Estoque em memória para demonstração
+    let estoque = {
+      ibiraCheio: 18, ibiraVazio: 12,
+      aldeinhaCheio: 25, aldeinhaVazio: 19,
+      levissimaCheio: 22, levissimaVazio: 16,
+      crystalCheio: 40, crystalVazio: 31,
+      cascosVendidos: 4
+    };
+
+    // Notificação Toast
+    function showToast(tag, msg) {
+      const toast = document.getElementById('toast-notification');
+      document.getElementById('toast-tag').innerText = tag;
+      document.getElementById('toast-msg').innerText = msg;
+      
+      toast.classList.remove('translate-x-96', 'opacity-0');
+      toast.classList.add('translate-x-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-x-96', 'opacity-0');
+        toast.classList.remove('translate-x-0', 'opacity-100');
+      }, 4000);
+    }
+
+    // Selecionar Cliente
+    function selecionarCliente(id) {
+      clienteAtual = id;
+      const d = clientesDados[id];
+
+      document.querySelectorAll('.cli-tab').forEach(b => {
+        b.classList.remove('active', 'bg-win-blue', 'text-white', 'border-win-blue');
+        b.classList.add('bg-slate-50', 'text-slate-700', 'border-slate-200');
+      });
+
+      const activeBtn = document.getElementById(`btn-cli-${id}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-win-blue', 'text-white', 'border-win-blue');
+        activeBtn.classList.remove('bg-slate-50', 'text-slate-700', 'border-slate-200');
+      }
+
+      document.getElementById('cli-agua').innerText = d.agua;
+      document.getElementById('cli-casco').innerText = d.casco;
+      document.getElementById('cli-cashback').innerText = `R$ ${d.cashback.toFixed(2).replace('.', ',')} acumulados`;
+      document.getElementById('cli-freq').innerText = d.freq;
+
+      document.getElementById('comanda-cliente-nome').innerText = d.nome;
+
+      showToast('CLIENTE IDENTIFICADO', `${d.nome} carregado no balcão!`);
+      atualizarTelaComanda();
+    }
+
+    // Adicionar Item à Comanda
+    function adicionarItem(nome, preco, categoria) {
+      const idx = itensComanda.findIndex(i => i.nome === nome);
+      if (idx >= 0) {
+        itensComanda[idx].qtd += 1;
+      } else {
+        itensComanda.push({ nome, preco, qtd: 1, categoria });
+      }
+
+      showToast('PRODUTO LANÇADO', `+1 ${nome} (R$ ${preco.toFixed(2).replace('.', ',')})`);
+      atualizarTelaComanda();
+    }
+
+    // Alterar quantidade
+    function alterarQtd(idx, delta) {
+      itensComanda[idx].qtd += delta;
+      if (itensComanda[idx].qtd <= 0) {
+        itensComanda.splice(idx, 1);
+      }
+      atualizarTelaComanda();
+    }
+
+    // Alternar Cashback
+    function alternarCashback() {
+      aplicarDescontoCashback = document.getElementById('check-cashback').checked;
+      atualizarTelaComanda();
+    }
+
+    // Limpar Comanda
+    function limparComanda() {
+      itensComanda = [];
+      aplicarDescontoCashback = false;
+      document.getElementById('check-cashback').checked = false;
+      atualizarTelaComanda();
+      showToast('COMANDA VAZIA', 'Todos os itens foram removidos.');
+    }
+
+    // Atualizar UI da Comanda
+    function atualizarTelaComanda() {
+      const container = document.getElementById('comanda-itens');
+      
+      if (itensComanda.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-slate-400 text-xs">
+            <i data-lucide="shopping-bag" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+            Nenhum item lançado ainda.<br>Clique nos produtos ao lado para somar na comanda.
+          </div>
+        `;
+        document.getElementById('comanda-subtotal').innerText = 'R$ 0,00';
+        document.getElementById('comanda-desconto').innerText = '- R$ 0,00';
+        document.getElementById('comanda-total').innerText = 'R$ 0,00';
+        lucide.createIcons();
+        return;
+      }
+
+      let subtotal = 0;
+      let html = '';
+
+      itensComanda.forEach((item, index) => {
+        const itemTotal = item.preco * item.qtd;
+        subtotal += itemTotal;
+
+        html += `
+          <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+            <div class="flex-1 pr-2">
+              <strong class="text-slate-900 block truncate">${item.nome}</strong>
+              <span class="text-slate-500 text-[11px]">R$ ${item.preco.toFixed(2).replace('.', ',')} un.</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button onclick="alterarQtd(${index}, -1)" class="w-6 h-6 rounded bg-slate-200 hover:bg-slate-300 font-bold flex items-center justify-center text-slate-700">-</button>
+              <span class="w-6 text-center font-black text-slate-900">${item.qtd}</span>
+              <button onclick="alterarQtd(${index}, 1)" class="w-6 h-6 rounded bg-slate-200 hover:bg-slate-300 font-bold flex items-center justify-center text-slate-700">+</button>
+              <span class="w-16 text-right font-black text-win-blueDark">R$ ${itemTotal.toFixed(2).replace('.', ',')}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+
+      // Cálculo de Cashback
+      const cashbackDisp = clientesDados[clienteAtual].cashback;
+      let desconto = 0;
+      if (aplicarDescontoCashback && cashbackDisp > 0) {
+        desconto = Math.min(cashbackDisp, subtotal);
+      }
+
+      const totalFinal = Math.max(0, subtotal - desconto);
+
+      document.getElementById('comanda-subtotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+      document.getElementById('comanda-desconto').innerText = `- R$ ${desconto.toFixed(2).replace('.', ',')}`;
+      document.getElementById('comanda-total').innerText = `R$ ${totalFinal.toFixed(2).replace('.', ',')}`;
+      
+      lucide.createIcons();
+    }
+
+    // Modal de Fechamento de Comanda
+    function abrirModalFechamento() {
+      if (itensComanda.length === 0) {
+        alert('Adicione pelo menos 1 item na comanda antes de fechar!');
+        return;
+      }
+      const total = document.getElementById('comanda-total').innerText;
+      document.getElementById('modal-valor-total').innerText = total;
+      document.getElementById('modal-cliente-resumo').innerText = `Cliente: ${clientesDados[clienteAtual].nome}`;
+      document.getElementById('modal-fechamento').classList.remove('hidden');
+    }
+
+    function fecharModalFechamento() {
+      document.getElementById('modal-fechamento').classList.add('hidden');
+    }
+
+    function selecionarPagamento(tipo) {
+      document.querySelectorAll('.pag-btn').forEach(b => {
+        b.classList.remove('active', 'border-2', 'border-grass-green', 'bg-grass-greenLight', 'text-grass-greenDark');
+        b.classList.add('border', 'border-slate-200', 'bg-slate-50', 'text-slate-700');
+      });
+
+      const btn = document.getElementById(`btn-pag-${tipo.toLowerCase()}`);
+      if (btn) {
+        btn.classList.add('active', 'border-2', 'border-grass-green', 'bg-grass-greenLight', 'text-grass-greenDark');
+        btn.classList.remove('border', 'border-slate-200', 'bg-slate-50', 'text-slate-700');
+      }
+
+      const areaPix = document.getElementById('area-pix');
+      if (tipo === 'PIX') {
+        areaPix.classList.remove('hidden');
+      } else {
+        areaPix.classList.add('hidden');
+      }
+    }
+
+    function confirmarRecebimento() {
+      // Baixa no estoque simulada
+      itensComanda.forEach(item => {
+        if (item.nome.includes('Ibirá')) {
+          estoque.ibiraCheio = Math.max(0, estoque.ibiraCheio - item.qtd);
+          estoque.ibiraVazio += item.qtd;
+        } else if (item.nome.includes('Aldeinha')) {
+          estoque.aldeinhaCheio = Math.max(0, estoque.aldeinhaCheio - item.qtd);
+          estoque.aldeinhaVazio += item.qtd;
+        } else if (item.nome.includes('Levíssima')) {
+          estoque.levissimaCheio = Math.max(0, estoque.levissimaCheio - item.qtd);
+          estoque.levissimaVazio += item.qtd;
+        } else if (item.nome.includes('Crystal') && !item.nome.includes('Completa')) {
+          estoque.crystalCheio = Math.max(0, estoque.crystalCheio - item.qtd);
+          estoque.crystalVazio += item.qtd;
+        } else if (item.nome.includes('Completa')) {
+          estoque.crystalCheio = Math.max(0, estoque.crystalCheio - item.qtd);
+          estoque.cascosVendidos += item.qtd; // Fica com o cliente!
+        }
+      });
+
+      // Atualiza mostradores de estoque do caminhão
+      atualizarMostradoresEstoque();
+
+      fecharModalFechamento();
+      limparComanda();
+      showToast('PAGAMENTO CONFIRMADO', 'Comanda fechada com sucesso! Estoque e cascos atualizados.');
+      alert('✅ Comanda Fechada com Sucesso!\n\nNa versão em produção oficial do Ecossistema H2O:\n1. O recibo digital é enviado no WhatsApp do cliente;\n2. Os cascos foram computados no resumo do caminhão;\n3. O valor entrou instantaneamente no caixa do dia do Luiz Fernando.');
+    }
+
+    function atualizarMostradoresEstoque() {
+      document.getElementById('est-ibira-cheio').innerText = estoque.ibiraCheio;
+      document.getElementById('est-ibira-vazio').innerText = estoque.ibiraVazio;
+      document.getElementById('est-aldeinha-cheio').innerText = estoque.aldeinhaCheio;
+      document.getElementById('est-aldeinha-vazio').innerText = estoque.aldeinhaVazio;
+      document.getElementById('est-levissima-cheio').innerText = estoque.levissimaCheio;
+      document.getElementById('est-levissima-vazio').innerText = estoque.levissimaVazio;
+      document.getElementById('est-crystal-cheio').innerText = estoque.crystalCheio;
+      document.getElementById('est-crystal-vazio').innerText = estoque.crystalVazio;
+      document.getElementById('est-cascos-vendidos').innerText = `${estoque.cascosVendidos} unidades`;
+    }
+
+    // Simulação do Chat WhatsApp
+    function simularEscolhaZap(opcao) {
+      const box = document.getElementById('chat-box');
+      box.innerHTML += `
+        <div class="bg-white p-2 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm space-y-1">
+          <p class="font-bold text-win-blue">Quero: ${opcao}</p>
+          <span class="text-[9px] text-slate-400 block text-right">Agora</span>
+        </div>
+        <div class="bg-[#DCF8C6] p-2.5 rounded-2xl rounded-tr-none ml-auto max-w-[88%] shadow-sm space-y-1">
+          <p class="font-bold text-[#075E54]">H2O Balcão:</p>
+          <p>Perfeito! Deseja incluir <strong>Cerveja Heineken Gelada ou Refrigerante</strong> na mesma viagem?</p>
+          <div class="pt-1 flex gap-1">
+            <button onclick="adicionarItem('${opcao}', 30.00, 'agua'); showToast('WHATSAPP BOT', 'Pedido fechado e enviado para o Balcão!');" class="bg-white text-xs font-bold px-2 py-1 rounded border border-slate-300">
+              Apenas a Água
+            </button>
+            <button onclick="adicionarItem('${opcao}', 30.00, 'agua'); adicionarItem('Cerveja Heineken Long Neck', 10.00, 'bar'); showToast('WHATSAPP COMBO', 'Combo Água + Heineken enviado para o Balcão!');" class="bg-grass-green text-white text-xs font-bold px-2 py-1 rounded">
+              + Cerveja Gelada!
+            </button>
+          </div>
+          <span class="text-[9px] text-slate-400 block text-right">Agora ✓✓</span>
+        </div>
+      `;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    // Disparar Radar de Domingo
+    function dispararRadarDemo() {
+      showToast('RADAR DOMINGO', 'Disparado alerta amigável para os 130 clientes de água!');
+      alert('🚀 DISPARO EM MASSA REALIZADO COM SUCESSO!\n\n130 clientes cadastrados receberam o lembrete de que a loja fecha aos domingos com sugestão de compra antecipada de galão de 10L e bebidas geladas.\n\nResultado previsto: De 25 a 40 pedidos antecipados hoje!');
+    }
+
+    // Simulação do Caminhão
+    function simularTrocaCaminhao() {
+      estoque.ibiraCheio = 24; estoque.ibiraVazio = 0;
+      estoque.aldeinhaCheio = 30; estoque.aldeinhaVazio = 0;
+      estoque.levissimaCheio = 25; estoque.levissimaVazio = 0;
+      estoque.crystalCheio = 50; estoque.crystalVazio = 0;
+      estoque.cascosVendidos = 0;
+      atualizarMostradoresEstoque();
+      showToast('CAMINHÃO ATENDIDO', 'Cascos vazios entregues e novos galões cheios abastecidos!');
+      alert('🚚 CONFERÊNCIA CONCLUÍDA!\n\nO caminhão diário recolheu todos os cascos vazios e entregou o estoque 100% reposto para o dia seguinte!');
+    }
+
+    // VIP Lounge - Pedido nas 3 Máquinas
+    function simularPedidoMaquina(num) {
+      showToast('GARÇOM EXPRESS', `MÁQUINA 0${num}: Jogador solicitou 1 Energético + 1 Cerveja!`);
+      adicionarItem('Energético Red Bull', 12.00, 'bar');
+      adicionarItem('Cerveja Heineken Long Neck', 10.00, 'bar');
+      alert(`🔔 ALERTA BALCÃO DO LUIZ:\n\nMáquina 0${num} (fundo da loja) fez um pedido da cadeira:\n• 1x Energético Red Bull\n• 1x Cerveja Heineken Gelada\n\nItens já lançados na comanda! Leve até a mão do jogador no fundo da loja.`);
+    }
+
+    // Simulador de Faturamento
+    function atualizarSimuladorLucro(clientes) {
+      document.getElementById('sim-clientes-label').innerText = `${clientes} clientes`;
+
+      const fator = clientes / 130;
+      const domingo = Math.round(2450 * fator);
+      const casco = Math.round(1170 * fator);
+      const lounge = Math.round(2100 * fator);
+      const total = domingo + casco + lounge;
+
+      document.getElementById('sim-domingo').innerText = `R$ ${domingo.toLocaleString('pt-BR')},00`;
+      document.getElementById('sim-casco').innerText = `R$ ${casco.toLocaleString('pt-BR')},00`;
+      document.getElementById('sim-lounge').innerText = `R$ ${lounge.toLocaleString('pt-BR')},00`;
+      document.getElementById('sim-total-adicional').innerText = `+ R$ ${total.toLocaleString('pt-BR')},00 / mês`;
+    }
+
+    // Modais Proposta Comercial
+    function abrirModalProposta() {
+      document.getElementById('modal-proposta').classList.remove('hidden');
+    }
+
+    function fecharModalProposta() {
+      document.getElementById('modal-proposta').classList.add('hidden');
+    }
+
+    // Inicialização da comanda no primeiro load
+    selecionarCliente('carlos');
+    adicionarItem('Água Ibirá 10L (Medicinal/Alcalina)', 30.00, 'agua');
+    adicionarItem('Cerveja Heineken Long Neck', 10.00, 'bar');
+  </script>
+</body>
+</html>
