@@ -242,7 +242,7 @@ Apresentamos a estrutura de valores oficiais para o desenvolvimento, implantaç�
   * Treinamento presencial/remoto prático com o Sr. Luiz Fernando até total domínio da ferramenta.
 
 ### 10.2. Manutenção, Nuvem e Suporte Mensal (Sustentação Operacional)
-* **Valor Mensal:** **R$ 250,00 / mês**
+* **Valor Mensal:** **R$ 900,00 / mês**
 * **O que está 100% incluso:**
   * Hospedagem de alta performance em nuvem Serverless (tempo de resposta sub-100ms);
   * Backups diários e redundantes de todas as comandas, histórico de clientes e estoque;
@@ -251,7 +251,7 @@ Apresentamos a estrutura de valores oficiais para o desenvolvimento, implantaç�
   * Monitoramento contínuo da estabilidade do robô de WhatsApp.
 
 > [!NOTE]
-> **Retorno do Investimento (ROI Imediato):** Com a antecipação de apenas **15 a 20 galões nos domingos fechados**, o faturamento recuperado já cobre com sobra a mensalidade de R$ 250,00, tornando o sistema um centro de lucro puro desde o primeiro mês.
+> **Retorno do Investimento (ROI Imediato):** O faturamento adicional gerado pela recuperação dos domingos, venda de 2º casco e consumo do lounge (+ R$ 4.700 a R$ 8.600/mês) cobre com ampla folga o investimento mensal de R$ 900,00, tornando o sistema um centro de lucro previsível no caixa.
 
 ---
 
